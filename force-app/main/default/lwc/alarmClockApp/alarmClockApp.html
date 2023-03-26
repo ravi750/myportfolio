@@ -1,3 +1,30 @@
 <template>
-    
+    <!--alarmclockapp is the parent component and clockdropdown is the child compoent-->
+    <div class="alarm-card">
+        <h1>Alarm Clock</h1>
+        <img src={clockImage} alt="Clock Image" height="200px" width="200px" class={shakeImage}>
+        <h2>{currentTime}</h2>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <c-clock-dropdown label="Hour(s)" options={hours} unqiue-id="select-hours" onoptionhandler={optionhandler}></c-clock-dropdown>
+            </div>
+            <div class="slds-col">
+                <c-clock-dropdown label="Minute(s)" options={minutes} unqiue-id="select-minutes" onoptionhandler={optionhandler}></c-clock-dropdown>
+            </div>
+            <div class="slds-col">
+                <c-clock-dropdown label="AM/PM" options={meridiems} unqiue-id="select-meridiems" onoptionhandler={optionhandler}></c-clock-dropdown>
+            </div>
+        </div>
+        <template if:false={isAlarmSet}>
+            <button class="slds-button slds-button_neutral slds-button_stretch" 
+                disabled={isFieldNotSelected} onclick={setAlarmHandler}>
+                Set Alarm
+            </button>
+        </template>
+        <template if:true={isAlarmSet}>
+            <button class="slds-button slds-button_neutral slds-button_stretch" onclick={clearAlarmHandler}>
+                Clear Alarm
+            </button>
+        </template>
+    </div>
 </template>

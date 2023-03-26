@@ -1,0 +1,16 @@
+<template>
+    <!--alarmclockapp is the parent component and clockdropdown is the child compoent-->
+    <div class="slds-form-element">
+        <label class="slds-form-element__label custom-label" for={uniqueId}>{label}</label>
+        <div class="slds-form-element__control">
+        <div class="slds-select_container">
+        <select class="slds-select custom-select" id={uniqueId} onchange={changeHandler}>
+            <option value="">Select…</option>
+            <template for:each={options} for:item="option">
+                <option value={option} key={option}>{option}</option>
+            </template>
+        </select>
+        </div>
+        </div>
+    </div>
+</template>
