@@ -1,7 +1,8 @@
 import { LightningElement } from 'lwc';
-const API_KEY = '0c9d0842a8d231e4dd6a17cf7b819b1a';
+//const API_KEY = '0c9d0842a8d231e4dd6a17cf7b819b1a';
 
 import WEATHER_ICONS from '@salesforce/resourceUrl/weatherAppIcons';
+import getWeatherDetails from '@salesforce/apex/weatherAppController.getWeatherDetails';
 
 export default class WeatherApp extends LightningElement {
 
@@ -19,6 +20,8 @@ export default class WeatherApp extends LightningElement {
     loadingText = '';
     isError = false;
     cityName = '';
+    response
+    weatherIcon
 
     get loadingClasses(){
         return this.isError ? 'error-message':'success-message';
@@ -38,7 +41,17 @@ export default class WeatherApp extends LightningElement {
         this.loadingText = 'Fetching weather details...';
         console.log('cityName=== ', this.cityName);
 
-        const URL = `https://api.openweathermap.org/data/2.5/weather?q=${this.cityName}&units=metric&appid=${API_KEY}`;
+        // calling server in apex and imported method here
+        getWeatherDetails({input:this.cityName}).then(result=>{
+            this.weatherDetails(JSON.parse(result));
+        }).catch((error)=>{
+            console.error(error);
+            this.response = null;
+            this.loadingText = "Something went wrong";
+            this.isError= true;
+        });
+
+        /*const URL = `https://api.openweathermap.org/data/2.5/weather?q=${this.cityName}&units=metric&appid=${API_KEY}`;
         fetch(URL).then(res=>res.json()).then(result=>{
             console.log(JSON.stringify(result));
             //this.loadingText = '';
@@ -47,7 +60,7 @@ export default class WeatherApp extends LightningElement {
             console.error(error);
             this.loadingText = "Something went wrong";
             this.isError= true;
-        });
+        });*/
     }
 
     weatherDetails(info){
@@ -57,6 +70,45 @@ export default class WeatherApp extends LightningElement {
         }
         else{
             this.loadingText = '';
+            this.isError = false;
+            const city = info.name;
+            const country = info.sys.country;
+            const {description, id} = info.weather[0];
+            const {temp, feels_like, humidity} = info.main;
+
+            if(id === 800){
+                this.weatherIcon = this.clearIcon;
+            }
+            else if((id >= 200 && id <= 232) || (id >= 600 && id <= 622)){
+                this.weatherIcon = this.stromIcon;
+            }
+            else if(id >= 701 && id <= 781){
+                this.weatherIcon = this.hazeIcon;
+            }
+            else if(id >= 801 && id <= 804){
+                this.weatherIcon = this.hazeIcon;
+            }
+            else if((id >= 500 && id <= 531) || (id >= 300 && id <= 321)){
+                this.weatherIcon = this.stromIcon;
+            }
+            else{}
+
+            this.response = {
+                city: city,
+                temperature: Math.floor(temp),
+                description:description,
+                location: `${city}, ${country}`,
+                feels_like: Math.floor(feels_like),
+                humidity: `${humidity}%`
+            }
         }
+    }
+
+    backHandler(){
+        this.response = null;
+        this.cityName = '';
+        this.loadingText = '';
+        this.isError = false;
+        this.weatherIcon = '';
     }
 }

@@ -1,12 +1,13 @@
 .app{
     background-color: #091f43;
     min-height: 100vh;
+    padding: 12px;
 }
 
 .app-card{
     background-color: #ffffff;
     max-width: 400px;
-    min-width: 375px;
+    min-width: 350px;
     border-radius: 8px;
 }
 
@@ -106,4 +107,8 @@ footer{
 
 .weatherImg{
     max-width: 125px;
+}
+
+.cursor{
+    cursor: pointer;
 }
