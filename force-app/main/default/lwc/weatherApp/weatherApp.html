@@ -1,3 +1,49 @@
 <template>
-    <h1>This is the Weather app</h1>
+    <div class="app flex-center">
+        <div class="app-card">
+            <header class="flex-center">
+                <h1>Weather App</h1>
+            </header>
+            <template if:true={loadingText}>
+                <div class={loadingClasses}>{loadingText}</div>
+            </template>
+            
+            <section class="slds-p-around_large">
+                <form onsubmit={submitHandler}>
+                    <input type="text" class="width100" placeholder="Enter city name" required spellcheck="false"
+                    onkeyup={searchHandler}/>
+                    <button type="submit" class="slds-m-top_large">Search</button>
+                </form>
+            </section>
+
+            <section class="slds-m-around_large text-center">
+                <img src={cloudIcon} alt="weather icon" class="weatherImg"/>
+                <div class="temperature">
+                    <span>12</span>
+                    <span>°</span>C
+                </div>
+                <div class="description">Clear sky</div>
+                <div class="location">
+                    <img src={mapIcon} alt="Location icon" />
+                    <span>London, GB</span>
+                </div>
+            </section>
+
+            <footer>
+                <div class="feels_like">
+                    <img src={thermometerIcon} alt="thermometer icon" />
+                    <div>11°C</div>
+                    <p>Feels like</p>
+                </div>
+                <div class="humidity">
+                    <div>
+                        <img src={dropletIcon} alt="droplet icon" />
+                        <div>83%</div>
+                    </div>
+                    <p>Humidity</p>
+                </div>
+            </footer>
+
+        </div>
+    </div>
 </template>
